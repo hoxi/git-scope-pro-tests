@@ -285,6 +285,174 @@ This repository is designed to test all features of the [Git Scope Pro IntelliJ 
 5. Return to master branch and compare
 6. **Expected**: Different files shown (DateUtils instead of JsonUtils)
 
+---
+
+## Bug Fix Verification Tests
+
+### Test 21: Indent Guides Visibility (Issue #68)
+
+**Objective**: Verify indent guides work correctly when Git Scope is enabled
+
+**Bug**: IDE native line indentation guides were disabled when Git Scope plugin was enabled
+
+1. Enable indent guides: Settings → Editor → General → Appearance → "Show indent guides"
+2. Open a Java file with nested code blocks (e.g., `Main.java` or `Order.java`)
+3. **Expected**: Vertical indent guide lines are visible showing code structure
+4. Create a scope and activate it (e.g., select **v0.5.0**)
+5. **Expected**: Indent guides remain visible and functional
+6. Switch between different scopes
+7. **Expected**: Indent guides continue to display correctly
+8. Toggle scope on/off with **Alt+H**
+9. **Expected**: Indent guides remain visible throughout
+
+**Success**: Indent guides are always visible regardless of Git Scope state
+
+### Test 22: "Select In" Action and Crosshair Button (Issue #59)
+
+**Objective**: Verify "Select In" integration and crosshair navigation
+
+**Feature**: Added "Git Scope" to "Select In" action and crosshair button
+
+1. Open a changed file in the editor (e.g., `ConfigService.java`)
+2. Right-click in the editor or use shortcut **Alt+F1**
+3. Select **"Select In"** from context menu
+4. **Expected**: "Git Scope" appears as an option in the Select In dialog
+5. Choose "Git Scope"
+6. **Expected**: Git Scope tool window opens and highlights the current file in the Change Browser
+7. Look for a crosshair/target icon button in Git Scope tool window toolbar
+8. Open a different file in editor (e.g., `DataService.java`)
+9. Click the crosshair button in Git Scope window
+10. **Expected**: Git Scope navigates to and highlights the currently open file
+
+**Success**: Select In integration works and crosshair button locates current file
+
+### Test 23: File List Update After Branch Switch (Issue #62)
+
+**Objective**: Verify file list updates automatically when switching Git branches
+
+**Bug**: File list did not update after switching branches, requiring manual tab switching
+
+1. Create a scope selecting **v0.4.0-beta** on **main** branch
+2. Note the files shown in Change Browser
+3. Switch to **feature/models-enhancement** branch:
+   ```bash
+   git checkout feature/models-enhancement
+   ```
+4. **Expected**: Change Browser automatically updates to show different files:
+   - New: `Customer.java`
+   - Modified: `User.java`, `Product.java`
+5. Switch to **feature/utils-expansion** branch:
+   ```bash
+   git checkout feature/utils-expansion
+   ```
+6. **Expected**: Change Browser automatically updates again to show:
+   - New: `CollectionUtils.java`
+   - Modified: `MathUtils.java`, `StringUtils.java`
+7. Switch back to **main** branch:
+   ```bash
+   git checkout main
+   ```
+8. **Expected**: Change Browser updates to show main branch changes
+
+**Success**: File list updates immediately after each branch switch without manual intervention
+
+### Test 24: Commit Diff Window with Local Modifications (Issue #56)
+
+**Objective**: Verify Commit: diff window works correctly with local modifications and scope changes
+
+**Bug**: Commit panel diff failed when file was open in another tab and non-HEAD scope was selected
+
+#### Part A: Basic Commit Diff with Local Modifications
+
+1. Create a scope selecting **v0.5.0** (not HEAD)
+2. Open `DataService.java` in editor
+3. Make a local modification (e.g., add a comment):
+   ```java
+   // This is a test comment
+   ```
+4. **Expected**: Gutter shows the local change relative to v0.5.0 scope
+5. Open Git tool window (View → Tool Windows → Git)
+6. In the Commit tab, find `DataService.java` in the changed files list
+7. Double-click to open **Commit: diff** window
+8. **Expected**: Commit diff opens showing your local modification
+9. Verify the diff is showing the difference correctly
+
+#### Part B: Switch Scope While Commit Diff Open
+
+10. With Commit: diff window still open, switch to a different scope (e.g., **v0.4.0-beta**)
+11. **Expected**: Commit diff continues to work correctly, showing local changes against HEAD (not the scope)
+12. Switch scope back to **v0.5.0**
+13. **Expected**: Commit diff still works correctly
+14. Toggle scope with **Alt+H** (to HEAD)
+15. **Expected**: Commit diff remains functional
+
+#### Part C: Close Original File
+
+16. Keep Commit: diff window open
+17. Close the original `DataService.java` editor tab (not the Commit: diff)
+18. Switch focus to Commit: diff window
+19. **Expected**: Commit diff still displays and works correctly
+20. Switch scopes again while only Commit: diff is open
+21. **Expected**: Diff continues to function
+
+#### Part D: Restore After Closing Commit Diff
+
+22. Close the Commit: diff window
+23. Re-open `DataService.java` from Project view
+24. **Expected**: File opens with gutter highlighting relative to currently selected scope
+25. Verify local modifications are still shown in gutter
+26. Switch scopes
+27. **Expected**: Gutter updates to show changes relative to new scope
+
+#### Part E: Multiple Commit Diffs
+
+28. Modify another file (e.g., `ConfigService.java`)
+29. Open Commit: diff for `ConfigService.java`
+30. Keep first Commit: diff window also open (so you have 2 Commit: diffs)
+31. Switch scopes multiple times
+32. **Expected**: Both Commit: diff windows continue working correctly
+
+**Success**: Commit: diff window always works regardless of:
+- Which scope is selected
+- Whether original file tab is open
+- Switching scopes while diff is open
+- Multiple Commit: diff windows open simultaneously
+
+### Test 25: Scope Tab Reordering (New Feature)
+
+**Objective**: Verify scope tabs can be reordered and persist across restarts
+
+**Feature**: Right-click on scope tabs to move them left or right, order persists
+
+1. Create multiple scopes (at least 3):
+   - Scope 1: **v0.3.0** (name it "Version 0.3")
+   - Scope 2: **v0.5.0** (name it "Version 0.5")
+   - Scope 3: **v1.0.0** (name it "Version 1.0")
+2. Verify initial tab order (left to right)
+3. Right-click on "Version 1.0" tab (rightmost)
+4. **Expected**: Context menu shows options including "Move Left" or "Move Right"
+5. Select **"Move Left"**
+6. **Expected**: "Version 1.0" tab moves one position to the left
+7. Right-click on "Version 0.3" tab (leftmost)
+8. **Expected**: Context menu shows appropriate move options
+9. Select **"Move Right"**
+10. **Expected**: "Version 0.3" tab moves one position to the right
+11. Arrange tabs in a specific order (e.g., 1.0, 0.3, 0.5)
+12. Note the exact order
+13. Close IntelliJ completely
+14. Reopen IntelliJ and the project
+15. Open Git Scope tool window
+16. **Expected**: Scope tabs appear in the same order as before restart
+17. Create a new scope and reorder it
+18. Restart IntelliJ again
+19. **Expected**: New order is persisted
+
+**Alternative**: If using drag-and-drop instead of context menu:
+- Verify tabs can be dragged to reorder
+- Verify order persists across restarts
+
+**Success**: Tab order can be customized and persists through IDE restarts
+
 ## Expected Repository State
 
 ### Main Branch Commits (in order):
@@ -328,16 +496,34 @@ git submodule update --init --recursive
 ## Success Criteria
 
 After completing all test cases, you should have verified:
+
+### Core Functionality (Tests 1-20)
 - ✅ Scope creation with branches, tags, and commit hashes
 - ✅ Change Browser shows correct diffs
 - ✅ Line gutter highlighting works
-- ✅ Keyboard shortcuts function correctly
+- ✅ Keyboard shortcuts function correctly (Alt+H, Ctrl+D, F7/Shift+F7)
 - ✅ Submodule changes are detected and displayed
 - ✅ Status bar widget shows current scope
 - ✅ Right-click actions (Show Diff, Show in Project, Rollback) work
 - ✅ Plugin handles various tag formats (semantic versions, alpha/beta, descriptive names)
 - ✅ Navigation between diffs works
 - ✅ Plugin works in both main repo and submodule contexts
+- ✅ Git references (HEAD~N) work correctly
+- ✅ Remote branch comparisons work
+
+### Bug Fixes (Tests 21-24)
+- ✅ Indent guides remain visible with Git Scope enabled (Issue #68)
+- ✅ "Select In" action includes Git Scope option (Issue #59)
+- ✅ Crosshair button locates current file in Git Scope window (Issue #59)
+- ✅ File list updates automatically after branch switch (Issue #62)
+- ✅ Commit: diff window works with local modifications (Issue #56)
+- ✅ Commit: diff persists through scope changes (Issue #56)
+- ✅ Commit: diff works when original file tab is closed (Issue #56)
+- ✅ Gutter highlighting restores correctly after closing Commit: diff (Issue #56)
+
+### New Features (Test 25)
+- ✅ Scope tabs can be reordered via right-click context menu
+- ✅ Scope tab order persists across IntelliJ restarts
 
 ## Contributing
 
