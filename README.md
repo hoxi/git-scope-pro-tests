@@ -1,16 +1,20 @@
 # Git Scope Pro - Test Repository
 
-This repository is designed to test all features of the [Git Scope Pro IntelliJ Plugin](https://github.com/hoxi/git-scope-pro).
+This repository is designed to test all features of
+the [Git Scope Pro IntelliJ Plugin](https://github.com/hoxi/git-scope-pro).
 
 ## Repository Structure
 
 ### Main Repository: `git-scope-pro-tests`
+
 - **3 branches**: `main`, `feature/models-enhancement`, `feature/utils-expansion`
-- **10 tags**: v0.1.0, v0.2.0-alpha, v0.3.0, v0.4.0-beta, v0.5.0, v1.0.0, cleanup, logging-update, refactor-services, submodule-init
+- **10 tags**: v0.1.0, v0.2.0-alpha, v0.3.0, v0.4.0-beta, v0.5.0, v1.0.0, cleanup, logging-update, refactor-services,
+  submodule-init
 - **13 Java files** across 3 packages (packageA, packageB, packageC)
 - **12 commits** with various types of changes (additions, modifications, deletions)
 
 ### Submodule: `libs/common-lib` → `git-scope-pro-tests-subrepo`
+
 - **2 branches**: `master`, `feature/enhanced-parsing`
 - **3 tags**: lib-v1.0.0, lib-v1.1.0, lib-v1.2.0
 - **4 Java utility files**
@@ -53,10 +57,10 @@ The tests are organized into logical groups for easier execution and understandi
 2. Create a new scope and select **v0.5.0** tag
 3. **Expected**: Change Browser should show all files changed between v0.5.0 and current HEAD
 4. Verify you see changes in:
-   - `ConfigService.java` (refactored with singleton pattern)
-   - `DataService.java` (added capacity and search methods)
-   - `CacheService.java` (newly added)
-   - `Main.java` (integrated all packages)
+    - `ConfigService.java` (refactored with singleton pattern)
+    - `DataService.java` (added capacity and search methods)
+    - `CacheService.java` (newly added)
+    - `Main.java` (integrated all packages)
 5. Right-click on `ConfigService.java` → **Show Diff**
 6. **Expected**: Diff window opens showing the refactoring changes (singleton pattern added)
 
@@ -69,8 +73,8 @@ The tests are organized into logical groups for easier execution and understandi
 3. Switch scope to **v0.4.0-beta**
 4. **Expected**: Change Browser updates to show changes from v0.4.0-beta to HEAD
 5. Verify differences between the two views:
-   - v0.2.0-alpha scope should show more files (packageB, packageC, submodule changes)
-   - v0.4.0-beta scope should show fewer files (only changes after that tag)
+    - v0.2.0-alpha scope should show more files (packageB, packageC, submodule changes)
+    - v0.4.0-beta scope should show fewer files (only changes after that tag)
 
 ### Test 3: Pre-release Version Tags (Alpha/Beta)
 
@@ -170,8 +174,8 @@ The tests are organized into logical groups for easier execution and understandi
 3. Create a scope selecting **v0.3.0** tag
 4. Open `Main.java` in the editor
 5. **Expected**: Lines added after v0.3.0 should be highlighted in the gutter:
-   - Import statements for StringUtils, ConfigService, DataService, User, Product
-   - All demo code (user creation, product creation, string utilities demo, data service demo)
+    - Import statements for StringUtils, ConfigService, DataService, User, Product
+    - All demo code (user creation, product creation, string utilities demo, data service demo)
 6. Switch scope to **v0.5.0**
 7. **Expected**: Fewer lines highlighted (only changes after v0.5.0)
 
@@ -180,17 +184,20 @@ The tests are organized into logical groups for easier execution and understandi
 **Objective**: Test right-click context menu actions
 
 #### Show Diff
+
 1. Create a scope selecting **v0.5.0**
 2. Right-click on a changed file in Change Browser
 3. Select **Show Diff**
 4. **Expected**: Diff window opens showing changes
 
 #### Show in Project
+
 5. Right-click on a file in Change Browser
 6. Select **Show in Project**
 7. **Expected**: Project panel expands and highlights the selected file
 
 #### Rollback to Scope Version
+
 8. Create a scope selecting **v0.2.0-alpha**
 9. Right-click on `StringUtils.java` in Change Browser
 10. Select **Rollback to scope version**
@@ -225,18 +232,18 @@ The tests are organized into logical groups for easier execution and understandi
    ```
 2. Create a scope selecting **v0.5.0** tag
 3. **Expected**: Should show 3 commits worth of changes:
-   - New `Customer.java` file
-   - Enhanced `User.java` (with createdAt and phoneNumber)
-   - Enhanced `Product.java` (with category and description)
+    - New `Customer.java` file
+    - Enhanced `User.java` (with createdAt and phoneNumber)
+    - Enhanced `Product.java` (with category and description)
 4. Switch to branch **feature/utils-expansion**:
    ```bash
    git checkout feature/utils-expansion
    ```
 5. Create a scope selecting **v0.4.0-beta** tag
 6. **Expected**: Should show 3 commits worth of changes:
-   - New `CollectionUtils.java`
-   - Enhanced `MathUtils.java` (with lcm, power, isEven, isOdd)
-   - Enhanced `StringUtils.java` (with truncate, countOccurrences, repeat)
+    - New `CollectionUtils.java`
+    - Enhanced `MathUtils.java` (with lcm, power, isEven, isOdd)
+    - Enhanced `StringUtils.java` (with truncate, countOccurrences, repeat)
 
 ### Test 15: Remote Branch References
 
@@ -259,8 +266,8 @@ The tests are organized into logical groups for easier execution and understandi
 1. Ensure you're on **main** branch
 2. Open Git Scope tool window and click to create a new scope
 3. In the branch/tag selector, verify you see existing branches marked as:
-   - LOCAL: `main`, `feature/models-enhancement`, `feature/utils-expansion`
-   - REMOTE: `origin/main`, `origin/feature/models-enhancement`, `origin/feature/utils-expansion`
+    - LOCAL: `main`, `feature/models-enhancement`, `feature/utils-expansion`
+    - REMOTE: `origin/main`, `origin/feature/models-enhancement`, `origin/feature/utils-expansion`
 4. Create a new local branch from current position:
    ```bash
    git checkout -b test/local-branch-verification
@@ -289,6 +296,7 @@ The tests are organized into logical groups for easier execution and understandi
     - Becomes inactive/invalid
 
 **Alternative Test - Unmerged Branch**:
+
 16. Create another test branch with a commit:
     ```bash
     git checkout -b test/with-changes
@@ -310,6 +318,7 @@ The tests are organized into logical groups for easier execution and understandi
 21. Verify branch disappears from scope selector
 
 **Success**:
+
 - Local branches are clearly marked as LOCAL
 - New local branches immediately appear in scope selector
 - Deleted local branches immediately disappear from scope selector
@@ -328,15 +337,15 @@ The tests are organized into logical groups for easier execution and understandi
    git checkout feature/models-enhancement
    ```
 4. **Expected**: Change Browser automatically updates to show different files:
-   - New: `Customer.java`
-   - Modified: `User.java`, `Product.java`
+    - New: `Customer.java`
+    - Modified: `User.java`, `Product.java`
 5. Switch to **feature/utils-expansion** branch:
    ```bash
    git checkout feature/utils-expansion
    ```
 6. **Expected**: Change Browser automatically updates again to show:
-   - New: `CollectionUtils.java`
-   - Modified: `MathUtils.java`, `StringUtils.java`
+    - New: `CollectionUtils.java`
+    - Modified: `MathUtils.java`, `StringUtils.java`
 7. Switch back to **main** branch:
    ```bash
    git checkout main
@@ -365,6 +374,7 @@ The tests are organized into logical groups for easier execution and understandi
 **Objective**: Test viewing changes within the submodule itself and branch comparison
 
 #### Part A: Submodule Internal Changes
+
 1. Navigate to `libs/common-lib` directory
 2. Check current commit in submodule:
    ```bash
@@ -373,19 +383,20 @@ The tests are organized into logical groups for easier execution and understandi
    ```
 3. Create a scope in the submodule context selecting **lib-v1.0.0** tag
 4. **Expected**: Shows all changes in submodule files since lib-v1.0.0:
-   - `Parser.java` (added)
-   - `Constants.java` (updated version and values)
-   - `DateUtils.java` (added)
+    - `Parser.java` (added)
+    - `Constants.java` (updated version and values)
+    - `DateUtils.java` (added)
 
 #### Part B: Submodule Branch Comparison
+
 5. Switch to feature branch:
    ```bash
    git checkout feature/enhanced-parsing
    ```
 6. Create a scope selecting **lib-v1.1.0**
 7. **Expected**: Shows changes on the feature branch:
-   - Enhanced `Parser.java` with overloaded methods
-   - New `JsonUtils.java`
+    - Enhanced `Parser.java` with overloaded methods
+    - New `JsonUtils.java`
 8. Return to master branch and compare:
    ```bash
    git checkout master
@@ -491,6 +502,7 @@ The tests are organized into logical groups for easier execution and understandi
 32. **Expected**: Both Commit: diff windows continue working correctly
 
 **Success**: Commit: diff window always works regardless of:
+
 - Which scope is selected
 - Whether original file tab is open
 - Switching scopes while diff is open
@@ -502,9 +514,9 @@ The tests are organized into logical groups for easier execution and understandi
 
 1. Create a scope selecting **v0.1.0** (initial commit)
 2. **Expected**: Shows ALL changes in the entire project:
-   - All files in packageA, packageB, packageC
-   - All submodule changes
-   - All modifications to Main.java
+    - All files in packageA, packageB, packageC
+    - All submodule changes
+    - All modifications to Main.java
 3. Verify the scope shows additions, modifications, and deletions correctly
 
 ---
@@ -518,9 +530,9 @@ The tests are organized into logical groups for easier execution and understandi
 **Feature**: Right-click on scope tabs to move them left or right, order persists
 
 1. Create multiple scopes (at least 3):
-   - Scope 1: **v0.3.0** (name it "Version 0.3")
-   - Scope 2: **v0.5.0** (name it "Version 0.5")
-   - Scope 3: **v1.0.0** (name it "Version 1.0")
+    - Scope 1: **v0.3.0** (name it "Version 0.3")
+    - Scope 2: **v0.5.0** (name it "Version 0.5")
+    - Scope 3: **v1.0.0** (name it "Version 1.0")
 2. Verify initial tab order (left to right)
 3. Right-click on "Version 1.0" tab (rightmost)
 4. **Expected**: Context menu shows options including "Move Left" or "Move Right"
@@ -541,6 +553,7 @@ The tests are organized into logical groups for easier execution and understandi
 19. **Expected**: New order is persisted
 
 **Alternative**: If using drag-and-drop instead of context menu:
+
 - Verify tabs can be dragged to reorder
 - Verify order persists across restarts
 
@@ -572,6 +585,7 @@ The tests are organized into logical groups for easier execution and understandi
 ## Expected Repository State
 
 ### Main Branch Commits (in order):
+
 1. Initial commit
 2. Add packageA with utility classes (StringUtils and MathUtils) - **v0.2.0-alpha**
 3. Add packageB with service classes - **v0.3.0**
@@ -586,26 +600,31 @@ The tests are organized into logical groups for easier execution and understandi
 12. Update submodule to feature/enhanced-parsing branch
 
 ### Feature Branches:
+
 - **feature/models-enhancement**: 3 commits diverging from v0.5.0
 - **feature/utils-expansion**: 3 commits diverging from v0.4.0-beta
 
 ### Submodule Commits:
+
 - **master**: lib-v1.0.0 → lib-v1.1.0 → lib-v1.2.0
 - **feature/enhanced-parsing**: diverges from lib-v1.1.0 with 2 additional commits
 
 ## Troubleshooting
 
 ### Submodule not showing changes
+
 ```bash
 git submodule update --init --recursive
 ```
 
 ### Plugin not detecting changes
+
 - Ensure you're on the correct branch
 - Refresh the Git Scope tool window
 - Rebuild the project if needed
 
 ### Gutter highlights not showing
+
 - Enable in Settings → Version Control → "Highlight modified lines in gutter"
 - Ensure a scope is active
 
@@ -614,6 +633,7 @@ git submodule update --init --recursive
 After completing all test cases, you should have verified:
 
 ### Core Functionality (Section A-B: Tests 1-13)
+
 - ✅ Scope creation with branches, tags, and commit hashes
 - ✅ Change Browser shows correct diffs
 - ✅ Line gutter highlighting works
@@ -626,6 +646,7 @@ After completing all test cases, you should have verified:
 - ✅ Scope renaming works
 
 ### Branch & Tag Operations (Section C: Tests 14-17)
+
 - ✅ Branch comparisons work (feature branches)
 - ✅ Remote branch comparisons work
 - ✅ Local branches are clearly marked as LOCAL
@@ -635,11 +656,13 @@ After completing all test cases, you should have verified:
 - ✅ File list updates automatically after branch switch (Issue #62)
 
 ### Submodule Testing (Section D: Tests 18-19)
+
 - ✅ Submodule changes are detected and displayed
 - ✅ Plugin works in submodule contexts
 - ✅ Submodule branch comparisons work
 
 ### Bug Fixes (Section E: Tests 20-23)
+
 - ✅ Indent guides remain visible with Git Scope enabled (Issue #68)
 - ✅ "Select In" action includes Git Scope option (Issue #59)
 - ✅ Crosshair button locates current file in Git Scope window (Issue #59)
@@ -650,6 +673,7 @@ After completing all test cases, you should have verified:
 - ✅ Multi-commit range testing works correctly
 
 ### Advanced Features (Section F: Tests 24-26)
+
 - ✅ Scope tabs can be reordered via right-click context menu
 - ✅ Scope tab order persists across IntelliJ restarts
 - ✅ "Select In" dialog integration works
@@ -657,7 +681,8 @@ After completing all test cases, you should have verified:
 
 ## Contributing
 
-If you find any issues with this test repository or want to add more test scenarios, please open an issue or pull request.
+If you find any issues with this test repository or want to add more test scenarios, please open an issue or pull
+request.
 
 ## License
 
