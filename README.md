@@ -453,6 +453,71 @@ This repository is designed to test all features of the [Git Scope Pro IntelliJ 
 
 **Success**: Tab order can be customized and persists through IDE restarts
 
+### Test 26: Local Branch Creation and Deletion
+
+**Objective**: Verify local branches appear/disappear correctly in scope selector
+
+**Feature**: Local branches should be marked as LOCAL and update dynamically
+
+1. Ensure you're on **main** branch
+2. Open Git Scope tool window and click to create a new scope
+3. In the branch/tag selector, verify you see existing branches marked as:
+   - LOCAL: `main`, `feature/models-enhancement`, `feature/utils-expansion`
+   - REMOTE: `origin/main`, `origin/feature/models-enhancement`, `origin/feature/utils-expansion`
+4. Create a new local branch from current position:
+   ```bash
+   git checkout -b test/local-branch-verification
+   ```
+5. Open the scope selector again (or create a new scope)
+6. **Expected**: `test/local-branch-verification` appears in the list marked as LOCAL
+7. Select this local branch as the scope base
+8. **Expected**: Scope is created successfully
+9. Make a small change to verify scope is working:
+   ```bash
+   echo "// Test comment" >> src/main/java/net/tagpad/Main.java
+   ```
+10. **Expected**: Change Browser shows `Main.java` as modified relative to the branch point
+11. Switch back to **main** branch:
+    ```bash
+    git checkout main
+    ```
+12. Delete the local test branch:
+    ```bash
+    git branch -d test/local-branch-verification
+    ```
+13. Open scope selector again
+14. **Expected**: `test/local-branch-verification` no longer appears in the LOCAL branches list
+15. If you had a scope using that branch, verify it either:
+    - Shows an error/warning that the branch no longer exists, OR
+    - Becomes inactive/invalid
+
+**Alternative Test - Unmerged Branch**:
+16. Create another test branch with a commit:
+    ```bash
+    git checkout -b test/with-changes
+    echo "// Another test" >> src/main/java/net/tagpad/Main.java
+    git add .
+    git commit -m "Test commit for branch deletion"
+    ```
+17. Verify it appears as LOCAL in scope selector
+18. Switch back to main and try to delete (will fail since unmerged):
+    ```bash
+    git checkout main
+    git branch -d test/with-changes
+    ```
+19. **Expected**: Git warns about unmerged changes
+20. Force delete:
+    ```bash
+    git branch -D test/with-changes
+    ```
+21. Verify branch disappears from scope selector
+
+**Success**:
+- Local branches are clearly marked as LOCAL
+- New local branches immediately appear in scope selector
+- Deleted local branches immediately disappear from scope selector
+- Plugin handles branch deletion gracefully
+
 ## Expected Repository State
 
 ### Main Branch Commits (in order):
@@ -521,9 +586,13 @@ After completing all test cases, you should have verified:
 - ✅ Commit: diff works when original file tab is closed (Issue #56)
 - ✅ Gutter highlighting restores correctly after closing Commit: diff (Issue #56)
 
-### New Features (Test 25)
+### New Features (Tests 25-26)
 - ✅ Scope tabs can be reordered via right-click context menu
 - ✅ Scope tab order persists across IntelliJ restarts
+- ✅ Local branches are marked as LOCAL in scope selector
+- ✅ New local branches immediately appear in scope selector
+- ✅ Deleted local branches immediately disappear from scope selector
+- ✅ Plugin handles branch deletion gracefully (when scope references deleted branch)
 
 ## Contributing
 
