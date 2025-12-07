@@ -1,3 +1,3 @@
 [submodule "libs/common-lib"]
 	path = libs/common-lib
-	url = ../common-lib-repo
+	url = https://github.com/hoxi/git-scope-pro-tests-subrepo.git
