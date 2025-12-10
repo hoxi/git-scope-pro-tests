@@ -39,11 +39,38 @@ the [Git Scope Pro IntelliJ Plugin](https://github.com/hoxi/git-scope-pro).
 The tests are organized into logical groups for easier execution and understanding:
 
 - **Section A: Basic Scope Creation & Reference Types** (Tests 1-6)
-- **Section B: Scope UI & Navigation Features** (Tests 7-13)
-- **Section C: Branch & Tag Operations** (Tests 14-17)
-- **Section D: Submodule Testing** (Tests 18-19)
-- **Section E: Bug Fixes Verification** (Tests 20-23)
-- **Section F: Advanced Features** (Tests 24-26)
+- **Section B: Scope UI & Navigation Features** (Tests 7-12)
+- **Section C: Branch & Tag Operations** (Tests 13-15)
+- **Section D: Submodule Testing** (Tests 17-18)
+- **Section E: Bug Fixes Verification** (Tests 19-21)
+- **Section F: Advanced Features** (Tests 22-25)
+
+### Quick Reference
+
+- **Test 1**: Create scope with v0.5.0, verify Change Browser shows correct files, open diff for ConfigService.java
+- **Test 2**: Create scope with v0.2.0-alpha and v0.4.0-beta, compare differences in Change Browser
+- **Test 3**: Single-click files in Change Browser to open preview tabs, double-click for permanent tabs
+- **Test 4**: Create scope using commit hash (e.g., 6ee9035), verify changes shown
+- **Test 5**: Rename scope tab, hover to see original hash/name, restore original name
+- **Test 6**: Create scopes with HEAD~5 and HEAD~10, compare differences
+- **Test 7**: Verify status bar shows current scope name, updates on scope switch
+- **Test 8**: Use Alt+H to toggle between HEAD and last scope
+- **Test 9**: Select file in Change Browser, press Ctrl+D to open diff
+- **Test 10**: Open diff, use F7/Shift+F7 to navigate between changes within the diff
+- **Test 11**: Create scope with v0.3.0, open Main.java, verify gutter highlights lines added after v0.3.0
+- **Test 12**: Right-click file in Change Browser, test Show Diff, Show in Project, and Rollback (using IntelliJ built-in)
+- **Test 13**: Create scope with v0.4.0, switch between branches, verify scope auto-updates (gutter and Change Browser)
+- **Test 14**: Create scope with origin/feature/models-enhancement
+- **Test 15**: Create local branch, verify it appears as LOCAL in scope selector, delete branch, verify it disappears
+- **Test 17**: Create scope with v0.3.0, verify submodule libs/common-lib shown as modified
+- **Test 18**: Create scope in submodule with lib-v1.0.0, switch to feature/enhanced-parsing branch, compare
+- **Test 19**: Open Main.java, create scopes with v0.3.0 and v0.5.0, switch between them, verify diff updates
+- **Test 20**: Use Alt+F1 to open Select In dialog, verify Git Scope appears; test crosshair button
+- **Test 21**: Create scope, modify file, open Commit diff, switch scopes, verify diff continues working
+- **Test 22**: Create 3 scopes, use right-click to reorder tabs, restart IntelliJ, verify order persists
+- **Test 23**: Use Alt+F1, verify Git Scope in Select In dialog
+- **Test 24**: Right-click commit in Git Log, create scope from commit
+- **Test 25**: Create two scopes: main (full) and main..HEAD (common ancestor), compare differences in MathUtils.java
 
 ---
 
@@ -76,27 +103,19 @@ The tests are organized into logical groups for easier execution and understandi
     - v0.2.0-alpha scope should show more files (packageB, packageC, submodule changes)
     - v0.4.0-beta scope should show fewer files (only changes after that tag)
 
-### Test 3: Pre-release Version Tags (Alpha/Beta)
+### Test 3: Single Click Preview Tab
 
-**Objective**: Test handling of alpha/beta version tags
+**Objective**: Test preview tab behavior with single click in Change Browser
 
-1. Create a scope selecting **v0.2.0-alpha**
-2. **Expected**: Plugin correctly parses and displays the alpha version
-3. Create a scope selecting **v0.4.0-beta**
-4. **Expected**: Plugin correctly handles beta version tag
-5. Verify both show appropriate changes in Change Browser
+1. Create a scope selecting **v0.5.0** tag
+2. Single-click on a file in Change Browser (e.g., `ConfigService.java`)
+3. **Expected**: File opens in a preview tab (italicized tab name)
+4. Single-click on another file (e.g., `DataService.java`)
+5. **Expected**: Preview tab is replaced with the new file
+6. Double-click on a file
+7. **Expected**: File opens in a permanent tab (non-italicized)
 
-### Test 4: Descriptive Tags
-
-**Objective**: Test non-semantic version tags
-
-1. Create a scope selecting **cleanup** tag
-2. **Expected**: Shows changes from the cleanup commit onward
-3. Create a scope selecting **logging-update** tag
-4. **Expected**: Shows changes from when logging was added
-5. Verify these work identically to version tags
-
-### Test 5: Commit Hash as Scope
+### Test 4: Commit Hash as Scope
 
 **Objective**: Test using specific commit hashes
 
@@ -109,6 +128,19 @@ The tests are organized into logical groups for easier execution and understandi
 4. **Expected**: Shows all changes since that commit
 5. Open `Main.java` in Change Browser
 6. **Expected**: Should show logging additions and all subsequent changes
+
+### Test 5: Tab Rename and Restore
+
+**Objective**: Test renaming scope tabs and restoring original names
+
+1. Create a scope with a commit hash (e.g., `6ee9035`)
+2. Right-click on the scope tab and select **Rename**
+3. Enter a custom name like "Logging Changes"
+4. **Expected**: Tab displays "Logging Changes"
+5. Hover over the renamed tab
+6. **Expected**: Tooltip shows the original commit hash (e.g., `6ee9035`)
+7. Right-click on the renamed tab and restore the original name
+8. **Expected**: Tab displays the original commit hash again
 
 ### Test 6: Git References (HEAD~N)
 
@@ -155,15 +187,16 @@ The tests are organized into logical groups for easier execution and understandi
 3. Press **Ctrl+D**
 4. **Expected**: Diff window opens for selected file showing changes
 
-### Test 10: F7/Shift+F7 Navigation
+### Test 10: F7/Shift+F7 Navigation in Diff
 
-**Objective**: Test navigating between diff windows
+**Objective**: Test stepping forward and backward between changes within a diff
 
-1. Open multiple diffs from Change Browser for different files
-2. Press **F7**
-3. **Expected**: Navigate to next diff window
-4. Press **Shift+F7**
-5. **Expected**: Navigate to previous diff window
+1. Create a scope selecting **v0.5.0** tag
+2. Open `Main.java` in Change Browser and show diff
+3. Press **F7** in the diff window
+4. **Expected**: Navigate to next change/hunk in the diff
+5. Press **Shift+F7**
+6. **Expected**: Navigate to previous change/hunk in the diff
 
 ### Test 11: Line Status Gutter
 
@@ -200,52 +233,41 @@ The tests are organized into logical groups for easier execution and understandi
 
 8. Create a scope selecting **v0.2.0-alpha**
 9. Right-click on `StringUtils.java` in Change Browser
-10. Select **Rollback to scope version**
-11. **Expected**: File content reverts to v0.2.0-alpha version (only has isEmpty, capitalize, reverse methods)
-12. Verify in editor that methods added later (truncate, countOccurrences, repeat) are removed
-13. Reset the change:
-    ```bash
-    git checkout -- src/main/java/net/tagpad/packageA/StringUtils.java
-    ```
-
-### Test 13: Rename Scope Tabs
-
-**Objective**: Test renaming scope tabs
-
-1. Create a scope with default name
-2. Right-click on the scope tab
-3. Select **Rename**
-4. Enter a custom name like "Testing v0.5.0"
-5. **Expected**: Tab displays the new custom name
+10. Select **Rollback to scope version** (using IntelliJ's built-in rollback)
+11. **Expected**: IntelliJ prompts to confirm rollback to previous HEAD version
+12. Confirm the rollback
+13. **Expected**: File content reverts to v0.2.0-alpha version (only has isEmpty, capitalize, reverse methods)
+14. Verify in editor that methods added later (truncate, countOccurrences, repeat) are removed
+15. Undo the rollback using IntelliJ's Local History or VCS → Revert
 
 ---
 
 ## Section C: Branch & Tag Operations
 
-### Test 14: Branch Comparison
+### Test 13: Automatic Scope Update on Branch Switch
 
-**Objective**: Test comparing HEAD with feature branches
+**Objective**: Test that scope automatically updates when switching branches
 
 1. Switch to branch **feature/models-enhancement**:
    ```bash
    git checkout feature/models-enhancement
    ```
-2. Create a scope selecting **v0.5.0** tag
-3. **Expected**: Should show 3 commits worth of changes:
-    - New `Customer.java` file
-    - Enhanced `User.java` (with createdAt and phoneNumber)
-    - Enhanced `Product.java` (with category and description)
-4. Switch to branch **feature/utils-expansion**:
+2. Create a scope selecting **v0.4.0** tag
+3. **Expected**: Shows changes specific to feature/models-enhancement branch
+4. Note the files and gutter highlighting in the editor
+5. Switch to branch **main**:
+   ```bash
+   git checkout main
+   ```
+6. **Expected**: Scope automatically updates - Change Browser shows different files, gutter highlighting updates
+7. Switch to branch **feature/utils-expansion**:
    ```bash
    git checkout feature/utils-expansion
    ```
-5. Create a scope selecting **v0.4.0-beta** tag
-6. **Expected**: Should show 3 commits worth of changes:
-    - New `CollectionUtils.java`
-    - Enhanced `MathUtils.java` (with lcm, power, isEven, isOdd)
-    - Enhanced `StringUtils.java` (with truncate, countOccurrences, repeat)
+8. **Expected**: Scope automatically updates again - Change Browser and gutter reflect the new branch
+9. Verify that both Change Browser and gutter highlighting update automatically with each branch switch
 
-### Test 15: Remote Branch References
+### Test 14: Remote Branch References
 
 **Objective**: Test comparing with remote branches
 
@@ -254,12 +276,10 @@ The tests are organized into logical groups for easier execution and understandi
    git checkout main
    git fetch origin
    ```
-2. Create a scope selecting **origin/main**
-3. **Expected**: Shows changes between remote main and local HEAD
-4. Create a scope selecting **origin/feature/models-enhancement**
-5. **Expected**: Shows appropriate branch differences
+2. Create a scope selecting **origin/feature/models-enhancement**
+3. **Expected**: Shows appropriate branch differences
 
-### Test 16: Local Branch Creation and Deletion
+### Test 15: Local Branch Creation and Deletion
 
 **Objective**: Verify local branches appear/disappear correctly in scope selector
 
@@ -295,28 +315,6 @@ The tests are organized into logical groups for easier execution and understandi
     - Shows an error/warning that the branch no longer exists, OR
     - Becomes inactive/invalid
 
-**Alternative Test - Unmerged Branch**:
-
-16. Create another test branch with a commit:
-    ```bash
-    git checkout -b test/with-changes
-    echo "// Another test" >> src/main/java/net/tagpad/Main.java
-    git add .
-    git commit -m "Test commit for branch deletion"
-    ```
-17. Verify it appears as LOCAL in scope selector
-18. Switch back to main and try to delete (will fail since unmerged):
-    ```bash
-    git checkout main
-    git branch -d test/with-changes
-    ```
-19. **Expected**: Git warns about unmerged changes
-20. Force delete:
-    ```bash
-    git branch -D test/with-changes
-    ```
-21. Verify branch disappears from scope selector
-
 **Success**:
 
 - Local branches are clearly marked as LOCAL
@@ -324,109 +322,75 @@ The tests are organized into logical groups for easier execution and understandi
 - Deleted local branches immediately disappear from scope selector
 - Plugin handles branch deletion gracefully
 
-### Test 17: File List Update After Branch Switch (Issue #62)
-
-**Objective**: Verify file list updates automatically when switching Git branches
-
-**Bug**: File list did not update after switching branches, requiring manual tab switching
-
-1. Create a scope selecting **v0.4.0-beta** on **main** branch
-2. Note the files shown in Change Browser
-3. Switch to **feature/models-enhancement** branch:
-   ```bash
-   git checkout feature/models-enhancement
-   ```
-4. **Expected**: Change Browser automatically updates to show different files:
-    - New: `Customer.java`
-    - Modified: `User.java`, `Product.java`
-5. Switch to **feature/utils-expansion** branch:
-   ```bash
-   git checkout feature/utils-expansion
-   ```
-6. **Expected**: Change Browser automatically updates again to show:
-    - New: `CollectionUtils.java`
-    - Modified: `MathUtils.java`, `StringUtils.java`
-7. Switch back to **main** branch:
-   ```bash
-   git checkout main
-   ```
-8. **Expected**: Change Browser updates to show main branch changes
-
-**Success**: File list updates immediately after each branch switch without manual intervention
-
 ---
 
 ## Section D: Submodule Testing
 
-### Test 18: Submodule Changes Detection
+### Test 17: Submodule Changes Detection
 
 **Objective**: Verify plugin detects and shows submodule changes
 
 1. Create a scope selecting **v0.3.0** tag
 2. **Expected**: Change Browser should show `libs/common-lib` as modified
-3. Navigate to the submodule change entry
+3. Select the submodule in Change Browser
 4. **Expected**: Should indicate submodule has been updated to a different commit
 5. Create a scope selecting **submodule-init** tag
 6. **Expected**: Should show the initial submodule addition
 
-### Test 19: Submodule Internal Changes and Branch Comparison
+### Test 18: Submodule Internal Changes and Branch Comparison
 
 **Objective**: Test viewing changes within the submodule itself and branch comparison
 
 #### Part A: Submodule Internal Changes
 
-1. Navigate to `libs/common-lib` directory
-2. Check current commit in submodule:
-   ```bash
-   cd libs/common-lib
-   git log --oneline
-   ```
-3. Create a scope in the submodule context selecting **lib-v1.0.0** tag
-4. **Expected**: Shows all changes in submodule files since lib-v1.0.0:
+1. Create a scope in the submodule context selecting **lib-v1.0.0** tag
+2. **Expected**: Shows all changes in submodule files since lib-v1.0.0:
     - `Parser.java` (added)
     - `Constants.java` (updated version and values)
     - `DateUtils.java` (added)
 
 #### Part B: Submodule Branch Comparison
 
-5. Switch to feature branch:
+3. Switch to feature branch:
    ```bash
+   cd libs/common-lib
    git checkout feature/enhanced-parsing
    ```
-6. Create a scope selecting **lib-v1.1.0**
-7. **Expected**: Shows changes on the feature branch:
+4. Create a scope selecting **lib-v1.1.0**
+5. **Expected**: Shows changes on the feature branch:
     - Enhanced `Parser.java` with overloaded methods
     - New `JsonUtils.java`
-8. Return to master branch and compare:
+6. Return to master branch and compare:
    ```bash
    git checkout master
    ```
-9. **Expected**: Different files shown (DateUtils instead of JsonUtils)
+7. **Expected**: Different files shown (DateUtils instead of JsonUtils)
 
 ---
 
 ## Section E: Bug Fixes Verification
 
-### Test 20: Indent Guides Visibility (Issue #68)
+### Test 19: Scope Diff for Specific File (Issue #68)
 
-**Objective**: Verify indent guides work correctly when Git Scope is enabled
+**Objective**: Verify switching between different scopes for a specific file shows correct diffs
 
 **Bug**: IDE native line indentation guides were disabled when Git Scope plugin was enabled
 
 1. Return to main repository root (if in submodule)
-2. Enable indent guides: Settings → Editor → General → Appearance → "Show indent guides"
-3. Open a Java file with nested code blocks (e.g., `Main.java` or `Order.java`)
-4. **Expected**: Vertical indent guide lines are visible showing code structure
-5. Create a scope and activate it (e.g., select **v0.5.0**)
-6. **Expected**: Indent guides remain visible and functional
-7. Switch between different scopes
-8. **Expected**: Indent guides continue to display correctly
-9. Toggle scope on/off with **Alt+H**
-10. **Expected**: Indent guides remain visible throughout
+2. Open `Main.java` in the editor
+3. Create a scope selecting **v0.3.0** tag
+4. **Expected**: Gutter shows lines added after v0.3.0
+5. Right-click on `Main.java` in Change Browser and select **Show Diff**
+6. **Expected**: Diff shows changes from v0.3.0 to HEAD
+7. Create another scope selecting **v0.5.0** tag
+8. Right-click on `Main.java` in Change Browser and select **Show Diff**
+9. **Expected**: Diff shows changes from v0.5.0 to HEAD (fewer changes than v0.3.0)
+10. Switch between the two scopes
+11. **Expected**: Diff and gutter highlighting update automatically to reflect the selected scope
 
-**Success**: Indent guides are always visible regardless of Git Scope state
+**Success**: Diff correctly shows changes for the selected scope, and switching scopes updates the diff accordingly
 
-### Test 21: "Select In" Action and Crosshair Button (Issue #59)
+### Test 20: "Select In" Action and Crosshair Button (Issue #59)
 
 **Objective**: Verify "Select In" integration and crosshair navigation
 
@@ -445,7 +409,7 @@ The tests are organized into logical groups for easier execution and understandi
 
 **Success**: Select In integration works and crosshair button locates current file
 
-### Test 22: Commit Diff Window with Local Modifications (Issue #56)
+### Test 21: Commit Diff Window with Local Modifications (Issue #56)
 
 **Objective**: Verify Commit: diff window works correctly with local modifications and scope changes
 
@@ -508,26 +472,17 @@ The tests are organized into logical groups for easier execution and understandi
 - Switching scopes while diff is open
 - Multiple Commit: diff windows open simultaneously
 
-### Test 23: Multi-commit Range Testing
-
-**Objective**: Verify correct diff across multiple commit types (comprehensive test)
-
-1. Create a scope selecting **v0.1.0** (initial commit)
-2. **Expected**: Shows ALL changes in the entire project:
-    - All files in packageA, packageB, packageC
-    - All submodule changes
-    - All modifications to Main.java
-3. Verify the scope shows additions, modifications, and deletions correctly
-
 ---
 
 ## Section F: Advanced Features
 
-### Test 24: Scope Tab Reordering
+### Test 22: Scope Tab Reordering
 
 **Objective**: Verify scope tabs can be reordered and persist across restarts
 
 **Feature**: Right-click on scope tabs to move them left or right, order persists
+
+**Note**: Drag-and-drop for tab reordering is not supported
 
 1. Create multiple scopes (at least 3):
     - Scope 1: **v0.3.0** (name it "Version 0.3")
@@ -552,14 +507,9 @@ The tests are organized into logical groups for easier execution and understandi
 18. Restart IntelliJ again
 19. **Expected**: New order is persisted
 
-**Alternative**: If using drag-and-drop instead of context menu:
+**Success**: Tab order can be customized using right-click context menu and persists through IDE restarts
 
-- Verify tabs can be dragged to reorder
-- Verify order persists across restarts
-
-**Success**: Tab order can be customized and persists through IDE restarts
-
-### Test 25: "Select In" Dialog Integration
+### Test 23: "Select In" Dialog Integration
 
 **Objective**: Test project panel filter and "Select In" dialog integration
 
@@ -568,7 +518,7 @@ The tests are organized into logical groups for easier execution and understandi
 3. Verify "Git Scope" appears as an option
 4. Test navigation from Project panel to Git Scope
 
-### Test 26: Git Panel Integration
+### Test 24: Git Panel Integration
 
 **Objective**: Test ability to use commits as scopes directly from Git panel
 
@@ -579,6 +529,27 @@ The tests are organized into logical groups for easier execution and understandi
 5. Create scope from commit
 6. **Expected**: New scope tab is created using that commit as the base
 7. Verify the scope works correctly
+
+### Test 25: Common Ancestor Mode
+
+**Objective**: Test "Only Changes Since Common Ancestor" mode to show differences between branches
+
+1. Ensure you're on **main** branch
+2. Create a scope named "main full" selecting **main** branch (without common ancestor mode)
+3. **Expected**: Shows all changes from main to HEAD
+4. Create another scope named "main..HEAD" selecting **main** with **Only Changes Since Common Ancestor** enabled
+5. **Expected**: Shows only changes unique to current branch since diverging from main
+6. Compare the two scopes:
+    - "main full" should show more changes
+    - "main..HEAD" should show only changes since the common ancestor
+7. Open `MathUtils.java` in the editor
+8. Switch between the two scopes
+9. **Expected**: `MathUtils.java` shows different gutter highlighting:
+    - "main full" highlights all lines different from main branch tip
+    - "main..HEAD" highlights only lines changed since common ancestor
+10. Verify the diffs shown in Change Browser differ between the two scopes
+
+**Success**: Common ancestor mode correctly identifies and shows only changes since the point where branches diverged
 
 ---
 
@@ -632,52 +603,52 @@ git submodule update --init --recursive
 
 After completing all test cases, you should have verified:
 
-### Core Functionality (Section A-B: Tests 1-13)
+### Core Functionality (Section A-B: Tests 1-12)
 
 - ✅ Scope creation with branches, tags, and commit hashes
 - ✅ Change Browser shows correct diffs
+- ✅ Preview tabs work with single-click, permanent tabs with double-click
 - ✅ Line gutter highlighting works
 - ✅ Keyboard shortcuts function correctly (Alt+H, Ctrl+D, F7/Shift+F7)
 - ✅ Status bar widget shows current scope
 - ✅ Right-click actions (Show Diff, Show in Project, Rollback) work
 - ✅ Plugin handles various tag formats (semantic versions, alpha/beta, descriptive names)
-- ✅ Navigation between diffs works
+- ✅ Navigation between changes in diffs works
 - ✅ Git references (HEAD~N) work correctly
-- ✅ Scope renaming works
+- ✅ Scope renaming works with tooltip showing original name and ability to restore
 
-### Branch & Tag Operations (Section C: Tests 14-17)
+### Branch & Tag Operations (Section C: Tests 13-15)
 
-- ✅ Branch comparisons work (feature branches)
+- ✅ Scope automatically updates when switching branches
 - ✅ Remote branch comparisons work
 - ✅ Local branches are clearly marked as LOCAL
 - ✅ New local branches immediately appear in scope selector
 - ✅ Deleted local branches immediately disappear from scope selector
 - ✅ Plugin handles branch deletion gracefully
-- ✅ File list updates automatically after branch switch (Issue #62)
 
-### Submodule Testing (Section D: Tests 18-19)
+### Submodule Testing (Section D: Tests 17-18)
 
 - ✅ Submodule changes are detected and displayed
 - ✅ Plugin works in submodule contexts
 - ✅ Submodule branch comparisons work
 
-### Bug Fixes (Section E: Tests 20-23)
+### Bug Fixes (Section E: Tests 19-21)
 
-- ✅ Indent guides remain visible with Git Scope enabled (Issue #68)
+- ✅ Scope diff for specific files shows correct changes when switching scopes
 - ✅ "Select In" action includes Git Scope option (Issue #59)
 - ✅ Crosshair button locates current file in Git Scope window (Issue #59)
 - ✅ Commit: diff window works with local modifications (Issue #56)
 - ✅ Commit: diff persists through scope changes (Issue #56)
 - ✅ Commit: diff works when original file tab is closed (Issue #56)
 - ✅ Gutter highlighting restores correctly after closing Commit: diff (Issue #56)
-- ✅ Multi-commit range testing works correctly
 
-### Advanced Features (Section F: Tests 24-26)
+### Advanced Features (Section F: Tests 22-25)
 
-- ✅ Scope tabs can be reordered via right-click context menu
+- ✅ Scope tabs can be reordered via right-click context menu (drag-and-drop not supported)
 - ✅ Scope tab order persists across IntelliJ restarts
 - ✅ "Select In" dialog integration works
 - ✅ Git panel integration allows creating scopes from commits
+- ✅ Common ancestor mode correctly shows differences since branch divergence
 
 ## Contributing
 
