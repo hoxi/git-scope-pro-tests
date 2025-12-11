@@ -10,6 +10,9 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/GitScopePro.xml
+.idea/aws.xml
+.idea/inspectionProfiles/
 *.iws
 *.iml
 *.ipr
